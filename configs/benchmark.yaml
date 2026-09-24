@@ -1,0 +1,59 @@
+# Benchmark settings. Everything that changes outputs is here and is saved with every run.
+
+datasets:
+  asr: data/manifests/asr.jsonl          # REAL recorded audio + verified transcripts (you create it; see data/README.md)
+  llm: data/manifests/llm.jsonl
+  tts: data/manifests/tts.jsonl
+
+# Preprocessing is explicit: nothing is applied unless listed. If a model needs a different input rate,
+# the final resample is done by the provider and recorded as `input_conversion` in each result.
+preprocess_profiles:
+  original: []
+  clean_16k:
+    - {op: mono}
+    - {op: resample, sample_rate: 16000}
+  clean_8k:
+    - {op: mono}
+    - {op: resample, sample_rate: 8000}
+  telephone_8k:                          # narrowband line + G.711 mu-law codec
+    - {op: mono}
+    - {op: resample, sample_rate: 8000}
+    - {op: bandpass, low_hz: 300, high_hz: 3400}
+    - {op: mulaw}
+  noisy_telephone_8k:                    # room noise before the line (seeded -> reproducible)
+    - {op: mono}
+    - {op: add_noise, snr_db: 10, seed: 0}
+    - {op: resample, sample_rate: 8000}
+    - {op: bandpass, low_hz: 300, high_hz: 3400}
+    - {op: mulaw}
+  # babble_telephone_8k:                 # add a background-speech recording you have rights to
+  #   - {op: mono}
+  #   - {op: add_noise, snr_db: 10, noise_file: data/noise/babble.wav}
+  #   - {op: resample, sample_rate: 8000}
+  #   - {op: mulaw}
+  trimmed_normalized_16k:
+    - {op: mono}
+    - {op: trim_silence, threshold_dbfs: -45, pad_ms: 100}
+    - {op: normalize, peak_dbfs: -1.0}
+    - {op: resample, sample_rate: 16000}
+
+asr_profiles: [original]
+telephone_suite: [clean_16k, clean_8k, telephone_8k, noisy_telephone_8k]
+
+llm:
+  temperature: 0.0
+  system_prompt: >-
+    You are a phone assistant for "Sagarmatha Services", a FICTIONAL company used for testing.
+    Reply in the caller's language: Nepali in Devanagari, keeping any English words the caller used.
+    Keep replies short (one or two sentences) because they will be spoken aloud.
+    Use the provided tools for customer data, balances and appointments; never invent account data.
+    If the answer is not in the knowledge base or tools, say you do not know and offer to transfer to a human.
+
+tts:
+  asr_judge: null        # e.g. whisper-small-ne-dragneel to compute an intelligibility-proxy CER
+
+pipeline:                # defaults for `voice-lab conversation` / `benchmark pipeline` (Step 40 target stack)
+  vad: silero-vad
+  asr: indicconformer-600m
+  llm: qwen3-8b
+  tts: piper-ne-google-x-low

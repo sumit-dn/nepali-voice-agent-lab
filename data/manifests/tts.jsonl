@@ -1,0 +1,30 @@
+{"id": "tts-basic-01", "category": "basic_nepali", "text": "नमस्ते, तपाईंलाई कस्तो छ?"}
+{"id": "tts-basic-02", "category": "basic_nepali", "text": "हाम्रो सेवा प्रयोग गर्नुभएकोमा धन्यवाद।"}
+{"id": "tts-short-01", "category": "short_phrases", "text": "हजुर।"}
+{"id": "tts-short-02", "category": "short_phrases", "text": "एक छिन पर्खनुहोस्।"}
+{"id": "tts-question-01", "category": "questions", "text": "के म तपाईंको नाम थाहा पाउन सक्छु?"}
+{"id": "tts-question-02", "category": "questions", "text": "तपाईंलाई अरू केही सहयोग चाहिन्छ?"}
+{"id": "tts-command-01", "category": "commands", "text": "कृपया आफ्नो ग्राहक नम्बर भन्नुहोस्।"}
+{"id": "tts-command-02", "category": "commands", "text": "बीपको आवाज आएपछि आफ्नो सन्देश छोड्नुहोस्।"}
+{"id": "tts-mixed-01", "category": "nepali_english_mixed", "text": "तपाईंको appointment tomorrow बिहान १० बजे छ।"}
+{"id": "tts-mixed-02", "category": "nepali_english_mixed", "text": "कृपया आफ्नो account number confirm गर्नुहोस्।"}
+{"id": "tts-mixed-03", "category": "nepali_english_mixed", "text": "Your meeting भोलि बिहान ११ बजे scheduled छ।"}
+{"id": "tts-mixed-04", "category": "nepali_english_mixed", "text": "तपाईंको internet plan upgrade भइसकेको छ।"}
+{"id": "tts-english-01", "category": "english", "text": "Thank you for calling. How can I help you today?"}
+{"id": "tts-english-02", "category": "english", "text": "Your request has been registered successfully."}
+{"id": "tts-numbers-01", "category": "numbers", "text": "तपाईंको फोन नम्बर ९८४१२३४५६७ हो।"}
+{"id": "tts-numbers-02", "category": "numbers", "text": "तपाईंको OTP ४ ७ २ ९ १ ५ हो।"}
+{"id": "tts-currency-01", "category": "currency", "text": "तपाईंको balance रु. २५,००० छ।"}
+{"id": "tts-currency-02", "category": "currency", "text": "मासिक शुल्क रु. १,२०० मात्र हो।"}
+{"id": "tts-dates-01", "category": "dates", "text": "तपाईंको appointment २०८३ साल असोज १२ गते हो।"}
+{"id": "tts-dates-02", "category": "dates", "text": "भुक्तानीको अन्तिम मिति २०८३/०७/१५ हो।"}
+{"id": "tts-names-01", "category": "names", "text": "राम बहादुर थापा जी, तपाईंलाई स्वागत छ।"}
+{"id": "tts-names-02", "category": "names", "text": "सीता कुमारी श्रेष्ठले तपाईंलाई फोन गर्नुहुनेछ।"}
+{"id": "tts-address-01", "category": "addresses", "text": "हाम्रो कार्यालय पुल्चोक, ललितपुर वडा नं. ३ मा छ।"}
+{"id": "tts-address-02", "category": "addresses", "text": "Technician भोलि बानेश्वर, काठमाडौं आउनुहुनेछ।"}
+{"id": "tts-proper-01", "category": "proper_nouns", "text": "सगरमाथा, लुम्बिनी र पोखरा नेपालका प्रसिद्ध ठाउँ हुन्।"}
+{"id": "tts-proper-02", "category": "proper_nouns", "text": "त्रिभुवन अन्तर्राष्ट्रिय विमानस्थल काठमाडौंमा छ।"}
+{"id": "tts-punct-01", "category": "punctuation", "text": "पर्खनुहोस्! के तपाईं निश्चित हुनुहुन्छ? हो, म निश्चित छु।"}
+{"id": "tts-punct-02", "category": "punctuation", "text": "हाम्रो सेवा — इन्टरनेट, टिभी, र फोन — एउटै प्याकेजमा उपलब्ध छ।"}
+{"id": "tts-long-01", "category": "long_nepali", "text": "हाम्रो कार्यालय आइतबारदेखि शुक्रबारसम्म बिहान दस बजेदेखि बेलुका पाँच बजेसम्म खुला रहन्छ, तर शनिबार र सार्वजनिक बिदाको दिन बन्द रहन्छ।"}
+{"id": "tts-paragraph-01", "category": "long_paragraphs", "text": "नयाँ connection को लागि निवेदन दिएपछि हाम्रो technician तीन कार्य दिनभित्र तपाईंको घरमा आउनुहुनेछ। Installation शुल्क एक हजार रुपैयाँ हो, जुन एक पटक मात्र तिर्नुपर्छ। Plan upgrade गर्नुभयो भने सोही दिनदेखि लागू हुन्छ, तर downgrade अर्को billing महिनाबाट मात्र लागू हुन्छ। थप जानकारीको लागि हाम्रो ग्राहक सेवामा सम्पर्क गर्नुहोस्।"}

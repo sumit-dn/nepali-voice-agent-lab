@@ -1,0 +1,82 @@
+[project]
+name = "nepali-voice-agent-lab"
+version = "0.1.0"
+readme = "README.md"
+description = "Standalone research lab for benchmarking open ASR / LLM / TTS models on Nepali and Nepali-English speech."
+license = { text = "LicenseRef-Proprietary (see LICENSE)" }
+requires-python = ">=3.11,<3.13"
+# Core: config, audio I/O, metrics, OpenAI-compatible LLM client, storage, reports.
+# No torch here - the core must install in seconds and run the LLM lab + tests.
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "soundfile>=0.12.1",
+    "pyyaml>=6.0",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+# Local model runtimes (ASR / TTS / VAD). Pick exactly one of `cpu` / `gpu` for torch.
+local = [
+    "transformers>=4.46",
+    "huggingface_hub>=0.25",
+    "onnxruntime>=1.18",
+    "piper-tts>=1.3",
+    "silero-vad>=5.1",
+]
+cpu = ["torch>=2.4", "torchaudio>=2.4"]
+gpu = ["torch>=2.4", "torchaudio>=2.4"]
+# Local web UI (voice-lab ui). Bound to 127.0.0.1, analytics off.
+ui = ["gradio>=5"]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11", "types-PyYAML", "types-psutil"]
+
+[project.scripts]
+voice-lab = "voice_lab.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/voice_lab"]
+
+[tool.uv]
+conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-cu128", extra = "gpu" },
+]
+torchaudio = [
+    { index = "pytorch-cpu", extra = "cpu" },
+    { index = "pytorch-cu128", extra = "gpu" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: needs real models/servers (run with: pytest -m integration)"]
+addopts = "-m 'not integration'"
+
+[tool.ruff]
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = true
+files = ["src"]

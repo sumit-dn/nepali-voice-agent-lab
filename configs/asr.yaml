@@ -1,0 +1,271 @@
+# ASR model registry. `enabled` = included in `voice-lab benchmark asr` by default.
+# Facts copied from each checkpoint's OWN card/licence on `verified` (never inferred from a base model).
+# commercial_use: yes | no | conditional | REVIEW REQUIRED
+# provider: hf-asr | indicconformer | gemini-asr | none (= tracked candidate, no adapter yet)
+
+models:
+  # --- Candidate 1: AI4Bharat IndicConformer ---------------------------------------------------
+  - id: indicconformer-600m
+    name: AI4Bharat IndicConformer 600M multilingual (CTC decoding)
+    provider: indicconformer
+    checkpoint: ai4bharat/indic-conformer-600m-multilingual
+    revision: e9b71b369c048e2c6b634d4c131061c34e441179   # pinned: trust_remote_code executes repo code
+    languages: [ne, hi, mai, as, bn, brx, doi, gu, kn, kok, ks, ml, mni, mr, or, pa, sa, sat, sd, ta, te, ur]
+    params: {language: ne, decoding: ctc}
+    size: 600M params, ~2.56 GB (ONNX assets)
+    hardware: "Not stated on card. ONNX Runtime; CPU should work (untested here), GPU via onnxruntime-gpu"
+    license:
+      id: MIT
+      url: https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual
+      commercial_use: "yes"
+      notes: "Card: 'released under the MIT license'. Training data not stated on card. Gated (auto-approve): accept terms + HF_TOKEN."
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual, https://github.com/AI4Bharat/IndicConformerASR]
+    notes: "Card example uses 'hi'; Nepali code is 'ne'. Card pins onnxruntime-gpu==1.20.1 which does not exist on PyPI."
+
+  - id: indicconformer-600m-rnnt
+    name: AI4Bharat IndicConformer 600M multilingual (RNNT decoding)
+    provider: indicconformer
+    checkpoint: ai4bharat/indic-conformer-600m-multilingual
+    revision: e9b71b369c048e2c6b634d4c131061c34e441179
+    languages: [ne]
+    params: {language: ne, decoding: rnnt}
+    size: same weights as indicconformer-600m
+    hardware: as indicconformer-600m
+    license: {id: MIT, url: https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual, commercial_use: "yes", notes: "Same checkpoint as indicconformer-600m."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual]
+
+  - id: indicconformer-ne-nemo
+    name: AI4Bharat IndicConformer Nepali (NeMo hybrid CTC/RNNT large)
+    provider: none
+    enabled: false
+    checkpoint: ai4bharat/indicconformer_stt_ne_hybrid_ctc_rnnt_large
+    revision: cd09ba7720f3b17d259f6bfd03e1463bc5ba517d
+    languages: [ne]
+    size: 120M params, ~523 MB .nemo
+    hardware: "CPU or GPU"
+    license: {id: MIT, url: https://huggingface.co/ai4bharat/indicconformer_stt_ne_hybrid_ctc_rnnt_large, commercial_use: "yes", notes: "MIT per card. Gated (auto). Training data not stated."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/ai4bharat/indicconformer_stt_ne_hybrid_ctc_rnnt_large]
+    notes: "Needs AI4Bharat NeMo fork (branch nemo-v2) - separate env. Community ONNX export OpenVoiceOS/ai4bharat-indicconformer-ne-onnx (MIT, int8 138 MB, not gated) is a CPU-friendly alternative worth an adapter."
+
+  # --- Candidate 2: OpenAI Whisper -----------------------------------------------------------
+  - id: whisper-tiny
+    name: OpenAI Whisper tiny (smoke-test baseline)
+    provider: hf-asr
+    checkpoint: openai/whisper-tiny
+    revision: 169d4a4341b33bc18d8881c4b69c2e104e1cc0af
+    languages: [ne, en, "97 more"]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 39M params, ~151 MB
+    hardware: "CPU fine"
+    license: {id: MIT, url: https://github.com/openai/whisper/blob/main/LICENSE, commercial_use: "yes", notes: "HF metadata says apache-2.0, GitHub says MIT for code+weights; both permissive."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/openai/whisper-tiny, https://github.com/openai/whisper]
+    notes: "Only a pipeline smoke-test baseline for Nepali."
+
+  - id: whisper-small
+    name: OpenAI Whisper small
+    provider: hf-asr
+    enabled: false
+    checkpoint: openai/whisper-small
+    revision: 973afd24965f72e36ca33b3055d56a652f456b4d
+    languages: [ne, en, "97 more"]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 244M params, ~967 MB
+    hardware: "~2 GB VRAM; CPU feasible"
+    license: {id: MIT, url: https://github.com/openai/whisper/blob/main/LICENSE, commercial_use: "yes", notes: "HF metadata apache-2.0 vs GitHub MIT; both permissive."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/openai/whisper-small]
+
+  - id: whisper-large-v3-turbo
+    name: OpenAI Whisper large-v3-turbo
+    provider: hf-asr
+    checkpoint: openai/whisper-large-v3-turbo
+    revision: 41f01f3fe87f28c78e2fbf8b568835947dd65ed9
+    languages: [ne, en, "97 more"]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 809M params, ~1.62 GB
+    hardware: "~6 GB VRAM; CPU possible but slow"
+    license: {id: MIT, url: https://huggingface.co/openai/whisper-large-v3-turbo, commercial_use: "yes", notes: "Code and weights MIT (GitHub README)."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/openai/whisper-large-v3-turbo, https://github.com/openai/whisper]
+    notes: "Forcing language=nepali may transliterate English words; also test with language unset for code-switching."
+
+  # --- Candidate 3: Nepali Whisper fine-tunes -------------------------------------------------
+  - id: whisper-small-ne-dragneel
+    name: Dragneel/whisper-small-nepali
+    provider: hf-asr
+    checkpoint: Dragneel/whisper-small-nepali
+    revision: 72c458faca071ea24b84f566fb3439485df1e2f4
+    languages: [ne]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 244M params, ~0.97 GB
+    hardware: "CPU feasible"
+    license: {id: Apache-2.0, url: https://huggingface.co/Dragneel/whisper-small-nepali, commercial_use: "REVIEW REQUIRED", notes: "Card licence Apache-2.0; trained on OpenSLR 54 (CC BY-SA 4.0) - whether ShareAlike reaches weights is unsettled."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Dragneel/whisper-small-nepali, https://www.openslr.org/54/]
+    notes: "Card-reported WER 26.69 on its own OpenSLR split (not verified here). Card snippet names a different repo (401)."
+
+  - id: whisper-medium-ne-dragneel
+    name: Dragneel/whisper-medium-nepali-openslr
+    provider: hf-asr
+    enabled: false
+    checkpoint: Dragneel/whisper-medium-nepali-openslr
+    revision: a435aa8b0879f7a7a5836be8926fb70315647313
+    languages: [ne]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 769M params, ~3.06 GB
+    hardware: "GPU recommended"
+    license: {id: Apache-2.0, url: https://huggingface.co/Dragneel/whisper-medium-nepali-openslr, commercial_use: "REVIEW REQUIRED", notes: "Card Apache-2.0; data OpenSLR 54 (CC BY-SA 4.0)."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Dragneel/whisper-medium-nepali-openslr]
+    notes: "Card-reported WER 14.04 on OpenSLR 54 (split unspecified)."
+
+  - id: whisper-turbo-ne-sumanpaudel
+    name: sumanpaudel1997/nepali-asr-whisper-turbo
+    provider: hf-asr
+    enabled: false
+    checkpoint: sumanpaudel1997/nepali-asr-whisper-turbo
+    revision: 00071400f501e001c1610b2921483353933aa14a
+    languages: [ne]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 809M params, ~3.24 GB (F32)
+    hardware: "GPU recommended (RTF 0.098 on L4 per card)"
+    license: {id: CC-BY-NC-4.0, url: https://huggingface.co/sumanpaudel1997/nepali-asr-whisper-turbo, commercial_use: "no", notes: "Research/non-commercial only."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/sumanpaudel1997/nepali-asr-whisper-turbo]
+    notes: "Card-reported WER SLR54 14.76 / FLEURS 39.56 / CV 48.35. Research reference point only."
+
+  - id: whisper-large-v3-ne-kiranpantha
+    name: kiranpantha/whisper-large-v3-nepali
+    provider: hf-asr
+    enabled: false
+    checkpoint: kiranpantha/whisper-large-v3-nepali
+    revision: 934c2bfe2955282afec7c7ad9271b3e9ce6c7587
+    languages: [ne]
+    params:
+      generate_kwargs: {language: nepali, task: transcribe}
+      long_form_kwargs: {return_timestamps: true}
+    size: 1.54B params, ~6.17 GB
+    hardware: "GPU required in practice"
+    license: {id: Apache-2.0, url: https://huggingface.co/kiranpantha/whisper-large-v3-nepali, commercial_use: "REVIEW REQUIRED", notes: "Card Apache-2.0; training set is private/removed (401) so provenance cannot be checked."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/kiranpantha/whisper-large-v3-nepali]
+
+  # --- Candidate 4: other Nepali ASR -----------------------------------------------------------
+  - id: indicwav2vec-ne-sumanpaudel
+    name: sumanpaudel1997/nepali-asr-indicwav2vec (CTC)
+    provider: hf-asr
+    checkpoint: sumanpaudel1997/nepali-asr-indicwav2vec
+    revision: aedaa1f860e9fec126748df81e8a9b5710038e60
+    languages: [ne]
+    params:
+      long_form_kwargs: {chunk_length_s: 30}
+    size: 94M params, ~0.38 GB
+    hardware: "CPU feasible (RTF 0.0025 on L4 per card)"
+    license: {id: CC-BY-NC-4.0, url: https://huggingface.co/sumanpaudel1997/nepali-asr-indicwav2vec, commercial_use: "no", notes: "Research/non-commercial only. Base ai4bharat/indicwav2vec_v1_hindi."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/sumanpaudel1997/nepali-asr-indicwav2vec]
+    notes: "Card-reported WER SLR54 14.89 / FLEURS 40.68. Enabled as a small research reference point, not a deployment candidate."
+
+  - id: mms-1b-all-npi
+    name: facebook/mms-1b-all (Nepali adapter 'npi')
+    provider: none
+    enabled: false
+    checkpoint: facebook/mms-1b-all
+    revision: 3d33597edbdaaba14a8e858e2c8caa76e3cec0cd
+    languages: [npi]
+    size: 1B params, ~3.86 GB + 9.3 MB adapter (full repo 29 GB - use allow_patterns)
+    hardware: "GPU recommended"
+    license: {id: CC-BY-NC-4.0, url: https://huggingface.co/facebook/mms-1b-all, commercial_use: "no", notes: "Non-commercial."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/facebook/mms-1b-all]
+    notes: "Adapter needs processor.tokenizer.set_target_lang('npi'); model.load_adapter('npi')."
+
+  - id: omniasr-ctc-1b
+    name: facebook/omniASR-CTC-1B (Omnilingual ASR)
+    provider: none
+    enabled: false
+    checkpoint: facebook/omniASR-CTC-1B
+    revision: 8c22e3ffdaa4aab6431b128b84b991a7d9c2515c
+    languages: [nep_Deva]
+    size: 975M params, ~3.9 GB
+    hardware: "~3 GiB VRAM BF16; audio < 40 s per call"
+    license: {id: Apache-2.0, url: https://github.com/facebookresearch/omnilingual-asr/blob/main/LICENSE, commercial_use: "yes", notes: "Code+models Apache-2.0; corpus CC-BY-4.0."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/facebook/omniASR-CTC-1B, https://github.com/facebookresearch/omnilingual-asr]
+    notes: "Needs omnilingual-asr (fairseq2) runtime - adapter TODO. Permissive licence makes it worth adding."
+
+  # --- Candidate 5: Qwen3-ASR ------------------------------------------------------------------
+  - id: qwen3-asr-1.7b
+    name: Qwen/Qwen3-ASR-1.7B
+    provider: none
+    enabled: false
+    checkpoint: Qwen/Qwen3-ASR-1.7B
+    revision: 7278e1e70fe206f11671096ffdd38061171dd6e5
+    languages: [zh, en, hi, "27 more - NOT Nepali"]
+    size: ~2.3B params total, ~4.7 GB
+    hardware: "GPU (bf16) per card"
+    license: {id: Apache-2.0, url: https://huggingface.co/Qwen/Qwen3-ASR-1.7B, commercial_use: "yes", notes: "Nepali NOT officially supported."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Qwen/Qwen3-ASR-1.7B]
+    notes: "qwen-asr pins transformers==4.57.6 (separate env), or use the -hf variant with transformers>=5.13."
+
+  - id: qwen3-asr-ne-sidskarki
+    name: sidskarki/Qwen3-ASR-Nepali (community fine-tune)
+    provider: none
+    enabled: false
+    checkpoint: sidskarki/Qwen3-ASR-Nepali
+    revision: 6ae9dd5306dde33ff2507820c626bac6fb867a7f
+    languages: [ne]
+    size: ~2.0B params, ~4.09 GB
+    hardware: "GPU (fp16) per card"
+    license: {id: "custom community-use-1.0", url: https://huggingface.co/sidskarki/Qwen3-ASR-Nepali/blob/main/LICENSE.md, commercial_use: "REVIEW REQUIRED", notes: "Only licensees with annual revenue <= USD 100k; larger orgs need a written licence. Not OSI."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/sidskarki/Qwen3-ASR-Nepali]
+    notes: "Card-reported avg WER 41.4 over FLEURS/IndicVoices-R/OpenSLR-43 (100 samples each). Card internally inconsistent on data size."
+
+  # --- Optional cloud baselines (OFF; need --allow-cloud and a personal/test GEMINI_API_KEY) ----
+  - id: gemini-3.8-flash-asr
+    name: Gemini 3.8 Flash (prompted transcription)
+    provider: gemini-asr
+    enabled: false
+    external: true
+    checkpoint: gemini-3.8-flash
+    languages: [ne, en]
+    params:
+      service: Google Gemini API
+      prompt: "Transcribe this audio verbatim. Write Nepali in Devanagari and keep English words in Latin script. Output only the transcript."
+    license: {id: Google Gemini API Terms, url: https://ai.google.dev/gemini-api/terms, commercial_use: "conditional", notes: "Paid API. FREE TIER: Google may use submitted content to improve products and humans may review it - never send sensitive/personal data."}
+    verified: "2026-09-23"
+    sources: [https://ai.google.dev/gemini-api/docs/models, https://ai.google.dev/gemini-api/docs/audio]
+    notes: "Stable model (2026-09-02). Inline audio limit 20 MB/request."
+
+  - id: gemini-3.5-transcribe
+    name: Gemini 3.5 Transcribe (dedicated STT)
+    provider: gemini-asr
+    enabled: false
+    external: true
+    checkpoint: gemini-3.5-transcribe
+    languages: [ne-NP, "85+ locales"]
+    params:
+      service: Google Gemini API
+      generation_config: {audioTranscriptionConfig: {languageCodes: [ne-NP]}}
+    license: {id: Google Gemini API Terms, url: https://ai.google.dev/gemini-api/terms, commercial_use: "conditional", notes: "As gemini-3.8-flash-asr."}
+    verified: "2026-09-23"
+    sources: [https://ai.google.dev/gemini-api/docs/transcribe]
+    notes: "Inline WAV audio verified working 2026-09-24 (docs only show Files API). Transcript is returned in parts[].audioTranscription.text, not parts[].text."

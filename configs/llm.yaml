@@ -1,0 +1,185 @@
+# LLM model registry. All local models go through the OpenAI-compatible provider (Ollama or vLLM),
+# so switching server never changes benchmark code. Sizes are Ollama Q4 downloads unless noted.
+# licence type: osi-open-source | open-weight-custom | non-commercial
+
+models:
+  - id: llama3.1-8b
+    name: Llama 3.1 8B Instruct (already installed in local Ollama)
+    provider: openai-compat
+    checkpoint: "llama3.1:latest"
+    revision: 46e0c10c039e     # Ollama digest = llama3.1:8b-instruct-q4_K_M
+    languages: [en, de, fr, it, pt, hi, es, th]
+    params: &ollama {server: ollama, base_url_env: OLLAMA_BASE_URL, default_base_url: "http://localhost:11434", api_prefix: /v1}
+    size: 8.03B, Q4_K_M 4.9 GB
+    hardware: "Q4 ~6-7 GB RAM; CPU feasible but slow"
+    license:
+      id: Llama 3.1 Community License
+      type: open-weight-custom
+      url: https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/LICENSE
+      commercial_use: conditional
+      notes: ">700M MAU needs Meta licence; 'Built with Llama' attribution; derivative names start with 'Llama'; Acceptable Use Policy applies."
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct, https://ollama.com/library/llama3.1/tags]
+    notes: "Nepali NOT in the official language list. Used here as a local pipeline smoke-test model only."
+
+  - id: qwen3-8b
+    name: Qwen3 8B
+    provider: openai-compat
+    checkpoint: "qwen3:8b"
+    revision: 500a1f067a9f
+    languages: ["119 incl. Nepali (Qwen3 blog)"]
+    params: {<<: *ollama, extra_body: {reasoning_effort: "none"}}   # thinking is ON by default; off for voice latency
+    size: 8.2B, Q4_K_M 5.2 GB (BF16 16.4 GB)
+    hardware: "Q4 ~6-8 GB RAM; BF16 needs ~24 GB GPU"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/Qwen/Qwen3-8B/blob/main/LICENSE, commercial_use: "yes", notes: "Keep licence/NOTICE."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Qwen/Qwen3-8B, https://qwenlm.github.io/blog/qwen3/, https://ollama.com/library/qwen3:8b]
+    notes: "Nepali explicitly listed. Context 32K native (131K YaRN). Tool calling yes."
+
+  - id: qwen3-14b
+    name: Qwen3 14B
+    provider: openai-compat
+    checkpoint: "qwen3:14b"
+    revision: bdbd181c33f2
+    languages: ["119 incl. Nepali"]
+    params: {<<: *ollama, extra_body: {reasoning_effort: "none"}}
+    size: 14.8B, Q4_K_M 9.3 GB (BF16 29.5 GB)
+    hardware: "Q4 ~11-12 GB RAM; BF16 needs 40-48 GB GPU"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/Qwen/Qwen3-14B/blob/main/LICENSE, commercial_use: "yes", notes: ""}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Qwen/Qwen3-14B, https://ollama.com/library/qwen3:14b]
+
+  - id: qwen3-4b-instruct
+    name: Qwen3 4B Instruct 2507 (non-thinking; CPU-class)
+    provider: openai-compat
+    checkpoint: "qwen3:4b-instruct"
+    languages: ["119 incl. Nepali (family claim; small-model quality unverified)"]
+    params: *ollama
+    size: 4.02B, Q4_K_M 2.5 GB
+    hardware: "CPU feasible"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/blob/main/LICENSE, commercial_use: "yes", notes: ""}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507, https://ollama.com/library/qwen3/tags]
+    notes: "Beware: plain `qwen3:4b` tag is the THINKING 2507 variant."
+
+  - id: qwen3.5-9b
+    name: Qwen3.5 9B
+    provider: openai-compat
+    enabled: false
+    checkpoint: "qwen3.5:9b"
+    revision: 6488c96fa5fa
+    languages: ["'201 languages' - list not published; Nepali REVIEW REQUIRED"]
+    params: {<<: *ollama, extra_body: {reasoning_effort: "none"}}
+    size: 9.65B (incl. vision), Q4_K_M 6.6 GB
+    hardware: "Q4 ~8-9 GB RAM"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/Qwen/Qwen3.5-9B/blob/main/LICENSE, commercial_use: "yes", notes: ""}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/Qwen/Qwen3.5-9B, https://ollama.com/library/qwen3.5/tags]
+
+  - id: mistral-small-3.2-24b
+    name: Mistral Small 3.2 24B Instruct 2506
+    provider: openai-compat
+    checkpoint: "mistral-small3.2:24b"
+    revision: 5a408ab55df5
+    languages: ["dozens incl. Nepali (3.1 card)"]
+    params: *ollama
+    size: 24B, Q4_K_M 15 GB (BF16 ~55 GB GPU)
+    hardware: "Q4 ~17-18 GB (24 GB GPU); CPU impractical for voice"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://www.apache.org/licenses/LICENSE-2.0, commercial_use: "yes", notes: ""}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506, https://ollama.com/library/mistral-small3.2/tags]
+    notes: "Nepali explicitly listed; 128K context; tool calling yes."
+
+  - id: gemma3-12b
+    name: Gemma 3 12B IT
+    provider: openai-compat
+    checkpoint: "gemma3:12b"
+    languages: ["140+ claimed; Nepali not explicitly listed"]
+    params: *ollama
+    size: 12.2B, Q4_K_M 8.1 GB
+    hardware: "Q4 ~10-11 GB RAM"
+    license: {id: Gemma Terms of Use, type: open-weight-custom, url: https://ai.google.dev/gemma/terms, commercial_use: conditional, notes: "Prohibited Use Policy incorporated; restrictions pass to redistributions/derivatives; Google may restrict usage."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/google/gemma-3-12b-it, https://ollama.com/library/gemma3:12b]
+    notes: "No native tool-calling in Ollama (prompt-based only) - tool tests will likely fail by design."
+
+  - id: gemma4-12b
+    name: Gemma 4 12B IT
+    provider: openai-compat
+    checkpoint: "gemma4:12b"
+    languages: ["35+ out of the box, 140+ pre-trained; Nepali not explicitly listed"]
+    params: *ollama
+    size: 11.95B, Q4_K_M 7.6 GB
+    hardware: "Q4 ~9-10 GB RAM"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://ai.google.dev/gemma/docs/gemma_4_license, commercial_use: "yes", notes: "Gemma 4 moved to Apache-2.0 (Gemma ToU explicitly excludes Gemma 4)."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/google/gemma-4-12B-it, https://ai.google.dev/gemma/docs/gemma_4_license, https://ollama.com/library/gemma4/tags]
+    notes: "Native tool use; 256K context."
+
+  - id: gpt-oss-20b
+    name: gpt-oss 20B (MoE, 3.6B active)
+    provider: openai-compat
+    enabled: false
+    checkpoint: "gpt-oss:20b"
+    languages: ["no language claim; Nepali REVIEW REQUIRED"]
+    params: *ollama
+    size: 20.9B MXFP4, 14 GB
+    hardware: "fits in 16 GB memory (card)"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/openai/gpt-oss-20b/blob/main/LICENSE, commercial_use: "yes", notes: "Plus USAGE_POLICY."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/openai/gpt-oss-20b]
+
+  - id: aya-expanse-8b
+    name: Aya Expanse 8B (tracked only - excluded)
+    provider: openai-compat
+    enabled: false
+    checkpoint: "aya-expanse:8b"
+    languages: ["23 languages - NOT Nepali"]
+    params: *ollama
+    size: 8B, 5.1 GB
+    license: {id: CC-BY-NC-4.0, type: non-commercial, url: https://creativecommons.org/licenses/by-nc/4.0/, commercial_use: "no", notes: "Plus Cohere Labs AUP."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/CohereLabs/aya-expanse-8b]
+
+  # --- Same model, different server: vLLM (needs a GPU host running `vllm serve Qwen/Qwen3-8B`) ---
+  - id: qwen3-8b-vllm
+    name: Qwen3 8B via vLLM
+    provider: openai-compat
+    enabled: false
+    checkpoint: Qwen/Qwen3-8B
+    revision: b968826d9c46dd6066d109eabc6255188de91218
+    languages: ["119 incl. Nepali"]
+    params:
+      server: vllm
+      base_url_env: VLLM_BASE_URL
+      default_base_url: "http://localhost:8000/v1"
+      extra_body: {chat_template_kwargs: {enable_thinking: false}}
+    size: BF16 16.4 GB
+    hardware: "24 GB GPU; vllm serve Qwen/Qwen3-8B --enable-auto-tool-choice --tool-call-parser hermes"
+    license: {id: Apache-2.0, type: osi-open-source, url: https://huggingface.co/Qwen/Qwen3-8B/blob/main/LICENSE, commercial_use: "yes", notes: ""}
+    verified: "2026-09-23"
+    sources: [https://docs.vllm.ai/en/latest/features/tool_calling/]
+
+  # --- Optional cloud baselines (OFF; --allow-cloud + personal/test GEMINI_API_KEY) ------------
+  - id: gemini-3.8-flash
+    name: Gemini 3.8 Flash (OpenAI-compatible endpoint)
+    provider: openai-compat
+    enabled: false
+    external: true
+    checkpoint: gemini-3.8-flash
+    params: &gemini {server: gemini, service: Google Gemini API, default_base_url: "https://generativelanguage.googleapis.com/v1beta/openai", api_key_env: GEMINI_API_KEY, extra_body: {reasoning_effort: low}}
+    license: {id: Google Gemini API Terms, type: cloud-api, url: https://ai.google.dev/gemini-api/terms, commercial_use: conditional, notes: "Free tier: content may be used to improve Google products and human-reviewed."}
+    verified: "2026-09-23"
+    sources: [https://ai.google.dev/gemini-api/docs/models, https://ai.google.dev/gemini-api/docs/openai]
+    notes: "OpenAI-compat support is beta per Google."
+
+  - id: gemini-3.5-flash-lite
+    name: Gemini 3.5 Flash-Lite
+    provider: openai-compat
+    enabled: false
+    external: true
+    checkpoint: gemini-3.5-flash-lite
+    params: *gemini
+    license: {id: Google Gemini API Terms, type: cloud-api, url: https://ai.google.dev/gemini-api/terms, commercial_use: conditional, notes: "As gemini-3.8-flash."}
+    verified: "2026-09-23"
+    sources: [https://ai.google.dev/gemini-api/docs/models]

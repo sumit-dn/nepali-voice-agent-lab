@@ -1,0 +1,27 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# environments / caches
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hf-cache/
+
+# audio + results never go to git (may contain voices; large)
+data/raw/
+data/processed/
+data/synthetic/
+data/noise/
+data/manifests/asr.jsonl
+data/manifests/asr_synthetic_*.jsonl
+results/
+*.wav
+*.flac
+*.mp3
+*.ogg

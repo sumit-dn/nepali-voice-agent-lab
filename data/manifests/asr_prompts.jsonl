@@ -1,0 +1,25 @@
+{"id": "p-basic-01", "language": "ne", "category": "basic_nepali", "text": "नमस्ते, मलाई तपाईंको सहयोग चाहियो।"}
+{"id": "p-basic-02", "language": "ne", "category": "basic_nepali", "text": "मेरो इन्टरनेट बिहानदेखि चलेको छैन।"}
+{"id": "p-devanagari-01", "language": "ne", "category": "devanagari", "text": "कृपया मेरो गुनासो दर्ता गरिदिनुहोस्।"}
+{"id": "p-conjunct-01", "language": "ne", "category": "conjunct_characters", "text": "विद्यार्थीहरूले क्षमता र ज्ञान बढाउन प्रशिक्षण लिनुपर्छ।"}
+{"id": "p-conjunct-02", "language": "ne", "category": "conjunct_characters", "text": "श्रीमान्‌को स्वास्थ्य परीक्षण द्वितीय पटक गरियो।"}
+{"id": "p-numbers-01", "language": "ne", "category": "phone_numbers", "text": "मेरो फोन नम्बर ९८४१२३४५६७ हो।", "entities": {"phone_numbers": ["९८४१२३४५६७"]}}
+{"id": "p-numbers-02", "language": "ne", "category": "otps", "text": "मेरो OTP चार सात दुई नौ एक पाँच हो।", "entities": {"otps": ["472915"]}}
+{"id": "p-numbers-03", "language": "ne", "category": "account_numbers", "text": "मेरो खाता नम्बर ०१२३४५६७८९ हो।", "entities": {"account_numbers": ["०१२३४५६७८९"]}}
+{"id": "p-numbers-04", "language": "ne", "category": "numbers", "text": "मलाई तीन वटा connection चाहियो।", "entities": {"numbers": ["3"]}}
+{"id": "p-currency-01", "language": "ne", "category": "currency", "text": "मेरो balance रु. २५,००० छ।", "entities": {"currency": ["२५,०००"]}}
+{"id": "p-currency-02", "language": "ne", "category": "currency", "text": "मैले पन्ध्र सय रुपैयाँ तिरेँ।", "entities": {"currency": ["1500"]}}
+{"id": "p-dates-01", "language": "ne", "category": "dates", "text": "मेरो appointment २०८३ साल असोज १२ गते हो।", "entities": {"dates": ["२०८३ साल असोज १२ गते"]}}
+{"id": "p-dates-02", "language": "ne", "category": "dates", "text": "भोलि बिहान दस बजे आउनुहोस्।", "entities": {"times": ["दस बजे"]}}
+{"id": "p-names-01", "language": "ne", "category": "names", "text": "मेरो नाम राम बहादुर थापा हो।", "entities": {"names": ["राम बहादुर थापा"]}}
+{"id": "p-names-02", "language": "ne", "category": "names", "text": "सीता कुमारी श्रेष्ठलाई फोन गरिदिनुहोस्।", "entities": {"names": ["सीता कुमारी श्रेष्ठ"]}}
+{"id": "p-address-01", "language": "ne", "category": "addresses", "text": "म बानेश्वर, काठमाडौं वडा नम्बर दसमा बस्छु।", "entities": {"addresses": ["बानेश्वर"]}}
+{"id": "p-address-02", "language": "ne", "category": "addresses", "text": "हाम्रो घर पुल्चोक, ललितपुरमा छ।", "entities": {"addresses": ["पुल्चोक", "ललितपुर"]}}
+{"id": "p-proper-01", "language": "ne", "category": "proper_nouns", "text": "म पोखराबाट लुम्बिनी जाँदैछु।", "entities": {"names": ["पोखरा", "लुम्बिनी"]}}
+{"id": "p-english-01", "language": "en", "category": "english", "text": "I want to check my account balance."}
+{"id": "p-mixed-01", "language": "ne-en", "category": "nepali_english_mixed", "text": "मलाई tomorrow को appointment चाहिन्छ।"}
+{"id": "p-mixed-02", "language": "ne-en", "category": "nepali_english_mixed", "text": "मेरो account balance check गरिदिनुहोस्।"}
+{"id": "p-mixed-03", "language": "ne-en", "category": "nepali_english_mixed", "text": "Please मेरो appointment cancel गरिदिनुहोस्।"}
+{"id": "p-mixed-04", "language": "ne-en", "category": "nepali_english_mixed", "text": "मेरो internet plan upgrade गर्न मिल्छ?"}
+{"id": "p-long-01", "language": "ne", "category": "long_nepali", "text": "मैले गत महिना नयाँ इन्टरनेट जडानको लागि निवेदन दिएको थिएँ तर अहिलेसम्म कुनै प्राविधिक मेरो घरमा आउनुभएको छैन, त्यसैले कृपया यसको कारण बताइदिनुहोस्।"}
+{"id": "p-conv-01", "language": "ne", "category": "conversational", "text": "अँ, त्यो, मलाई लाग्छ कि बिल अलि बढी आयो जस्तो छ।"}

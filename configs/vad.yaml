@@ -1,0 +1,19 @@
+models:
+  - id: silero-vad
+    name: Silero VAD
+    provider: silero
+    checkpoint: silero-vad (weights bundled in the pip package)
+    languages: [language-agnostic]
+    params:
+      sample_rate: 16000          # 8000 or 16000
+      onnx: false                 # torch is required either way
+      options:                    # passed to silero_vad.get_speech_timestamps
+        threshold: 0.5
+        min_speech_duration_ms: 250
+        min_silence_duration_ms: 300   # silence that ends a speech segment (turn-taking knob)
+        speech_pad_ms: 100
+    size: ~2 MB (inside pip package)
+    hardware: "CPU, <1 ms per 30 ms chunk"
+    license: {id: MIT, url: https://github.com/snakers4/silero-vad/blob/master/LICENSE, commercial_use: "yes", notes: "README alt-text says CC BY-NC; badge and LICENSE file say MIT (alt-text is stale)."}
+    verified: "2026-09-23"
+    sources: [https://pypi.org/project/silero-vad/, https://github.com/snakers4/silero-vad]

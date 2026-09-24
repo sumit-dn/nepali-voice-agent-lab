@@ -1,0 +1,172 @@
+# TTS model registry. Voice licences are per checkpoint (Piper: each voice's MODEL_CARD), never the engine's.
+# Checked and NOT present: facebook/mms-tts-npi does not exist (Nepali absent from MMS-TTS list);
+# Chatterbox, IndicF5, Kokoro and base XTTS-v2 do not support Nepali officially (verified 2026-09-23);
+# the community Oshara XTTS-v2 Nepali fine-tune is registered below.
+
+models:
+  - id: piper-ne-google-x-low
+    name: Piper ne_NP-google-x_low
+    provider: piper
+    checkpoint: rhasspy/piper-voices
+    revision: c10ece1aade47bb51c153c893d14e5bf8e5b7117
+    languages: [ne]
+    params: {file: ne/ne_NP/google/x_low/ne_NP-google-x_low.onnx}
+    size: ~6.9M params (inferred), 27.7 MB, 16 kHz, 18 speakers (all female, OpenSLR-43)
+    hardware: "CPU real-time (onnxruntime)"
+    license:
+      id: CC-BY-SA-4.0 (voice data); engine GPL-3.0-or-later
+      url: https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/x_low/MODEL_CARD
+      commercial_use: REVIEW REQUIRED
+      notes: "Trained from scratch on OpenSLR-43 (Google, CC BY-SA 4.0): attribution + ShareAlike (reach into weights unsettled). piper-tts engine is GPL-3.0 - distribution implications need legal review. Cleanest Piper option."
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/rhasspy/piper-voices/tree/main/ne/ne_NP, https://www.openslr.org/43/, https://pypi.org/project/piper-tts/]
+
+  - id: piper-ne-google-medium
+    name: Piper ne_NP-google-medium
+    provider: piper
+    checkpoint: rhasspy/piper-voices
+    revision: c10ece1aade47bb51c153c893d14e5bf8e5b7117
+    languages: [ne]
+    params: {file: ne/ne_NP/google/medium/ne_NP-google-medium.onnx}
+    size: ~19M params (inferred), 76.8 MB, 22.05 kHz, 18 speakers (all female)
+    hardware: "CPU real-time"
+    license:
+      id: CC-BY-SA-4.0 (Nepali data) + lessac research-only lineage
+      url: https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/MODEL_CARD
+      commercial_use: REVIEW REQUIRED
+      notes: "Fine-tuned from en_US lessac; lessac/Blizzard-2013 licence is research-only and excludes commercial voice-synthesis development."
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/google/medium/MODEL_CARD]
+
+  - id: piper-ne-chitwan-medium
+    name: Piper ne_NP-chitwan-medium
+    provider: piper
+    checkpoint: rhasspy/piper-voices
+    revision: c10ece1aade47bb51c153c893d14e5bf8e5b7117
+    languages: [ne]
+    params: {file: ne/ne_NP/chitwan/medium/ne_NP-chitwan-medium.onnx}
+    size: ~15.7M params (inferred), 63 MB, 22.05 kHz, 1 speaker (gender undocumented)
+    hardware: "CPU real-time"
+    license:
+      id: CC0 (data) + lessac research-only lineage
+      url: https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/chitwan/medium/MODEL_CARD
+      commercial_use: REVIEW REQUIRED
+      notes: "Dataset CC0 (OHF-Voice voice-datasets) but weights fine-tuned from lessac (research-only data)."
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/rhasspy/piper-voices/resolve/main/ne/ne_NP/chitwan/medium/MODEL_CARD, https://github.com/OHF-Voice/voice-datasets]
+
+  - id: indic-parler-tts
+    name: AI4Bharat Indic Parler-TTS
+    provider: parler
+    enabled: false   # needs its own venv (parler-tts pins transformers==4.46.1) - see docs/tts.md
+    checkpoint: ai4bharat/indic-parler-tts
+    revision: 7b527af5ee8ed1f9a28d80b19703ed9bb8ba10ca
+    languages: [ne, hi, mai, en, "17 more"]
+    params:
+      voice: Amrita
+      description: "{voice} speaks with a moderate pace in a clear voice. The recording is of very high quality with no background noise."
+    size: 0.94B params, ~3.76 GB, 44.1 kHz
+    hardware: "CUDA GPU recommended; CPU very slow"
+    license: {id: Apache-2.0, url: https://huggingface.co/ai4bharat/indic-parler-tts, commercial_use: "yes", notes: "Card Apache-2.0; training data includes IndicTTS/LIMMITS/Rasa (CC BY 4.0) - attribute. Gated (auto): accept terms + HF_TOKEN."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/ai4bharat/indic-parler-tts, https://github.com/huggingface/parler-tts]
+    notes: "Only documented Nepali speaker: 'Amrita' (female). Streaming supported per card."
+
+  - id: xtts-ne-oshara-e10
+    name: Oshara XTTS-v2 Nepali fine-tune (epoch 10, recommended by the card)
+    provider: xtts
+    enabled: false   # non-commercial licence + RTF ~3.7 on this CPU: opt-in only
+    checkpoint: Oshara/xtts-v2-nepali
+    revision: 1ef72e4a13e201409a895ef45c36b38adbe324d8
+    languages: [ne]
+    params:
+      subfolder: epoch-10
+      language: hi          # see notes: [hi] token, measured better than the card's "ne" route
+      voice: Claribel Dervla   # one of 58 built-in XTTS speakers; or pass a reference WAV to clone
+      options: {temperature: 0.65, repetition_penalty: 5.0}   # values from the model card
+    size: ~0.47B params, 1.88 GB (epoch-10/ folder), 24 kHz, zero-shot voice cloning
+    hardware: "Separate env (make install-xtts). CPU works but slow (RTF ~3.7, load ~32 s on i5-7400); GPU recommended"
+    license:
+      id: Coqui Public Model License 1.0.0 (inherited from coqui/XTTS-v2, per the fine-tune's own card)
+      url: https://huggingface.co/coqui/XTTS-v2/blob/main/LICENSE.txt
+      commercial_use: "no"
+      notes: "CPML 'allows only non-commercial use of a machine learning model and its outputs'. Explicitly allowed: 'Use by commercial or for-profit entities for testing, evaluation, or non-commercial research and development' (so benchmarking here is fine). Not allowed: production/revenue use, or using outputs to train models for commercial use. Coqui shut down in 2024, so no commercial licence can be obtained. Fine-tune data ('4,140 single-speaker Nepali clips') source not stated - REVIEW REQUIRED. Runtime coqui-tts is MPL-2.0."
+    verified: "2026-09-24"
+    sources: [https://huggingface.co/Oshara/xtts-v2-nepali, https://huggingface.co/coqui/XTTS-v2/blob/main/LICENSE.txt, https://github.com/idiap/coqui-ai-TTS]
+    notes: "The card's language='ne' route speaks a literal 'ने' before every sentence with stock coqui-tts 0.27.5 (vocab has no [ne] token); the [hi] token measured ASR-judge CER 0.000 vs 0.094 on 3 digit-free sentences (2026-09-24). Side effect: the hi cleaner expands digits into HINDI number words - normalise Nepali numbers before TTS. Card-reported: Whisper round-trip CER 0.380, SCOREQ auto-MOS 4.21 (not verified here)."
+
+  - id: xtts-ne-oshara-e20
+    name: Oshara XTTS-v2 Nepali fine-tune (epoch 20, more fitted to the training speaker)
+    provider: xtts
+    enabled: false   # non-commercial licence + RTF ~3.7 on this CPU: opt-in only
+    checkpoint: Oshara/xtts-v2-nepali
+    revision: 1ef72e4a13e201409a895ef45c36b38adbe324d8
+    languages: [ne]
+    params:
+      subfolder: epoch-20
+      language: hi          # see notes: [hi] token, measured better than the card's "ne" route
+      voice: Claribel Dervla   # one of 58 built-in XTTS speakers; or pass a reference WAV to clone
+      options: {temperature: 0.65, repetition_penalty: 5.0}   # values from the model card
+    size: ~0.47B params, 1.88 GB (epoch-20/ folder), 24 kHz, zero-shot voice cloning
+    hardware: "Separate env (make install-xtts). CPU works but slow (RTF ~3.7, load ~32 s on i5-7400); GPU recommended"
+    license:
+      id: Coqui Public Model License 1.0.0 (inherited from coqui/XTTS-v2, per the fine-tune's own card)
+      url: https://huggingface.co/coqui/XTTS-v2/blob/main/LICENSE.txt
+      commercial_use: "no"
+      notes: "CPML 'allows only non-commercial use of a machine learning model and its outputs'. Explicitly allowed: 'Use by commercial or for-profit entities for testing, evaluation, or non-commercial research and development' (so benchmarking here is fine). Not allowed: production/revenue use, or using outputs to train models for commercial use. Coqui shut down in 2024, so no commercial licence can be obtained. Fine-tune data ('4,140 single-speaker Nepali clips') source not stated - REVIEW REQUIRED. Runtime coqui-tts is MPL-2.0."
+    verified: "2026-09-24"
+    sources: [https://huggingface.co/Oshara/xtts-v2-nepali, https://huggingface.co/coqui/XTTS-v2/blob/main/LICENSE.txt, https://github.com/idiap/coqui-ai-TTS]
+    notes: "The card's language='ne' route speaks a literal 'ने' before every sentence with stock coqui-tts 0.27.5 (vocab has no [ne] token); the [hi] token measured ASR-judge CER 0.000 vs 0.094 on 3 digit-free sentences (2026-09-24). Side effect: the hi cleaner expands digits into HINDI number words - normalise Nepali numbers before TTS. Card-reported: Whisper round-trip CER 0.380, SCOREQ auto-MOS 4.21 (not verified here)."
+
+  - id: kala-nepali-v0.2
+    name: ampixa/real-nepali-v0.2-kala (VITS/ONNX)
+    provider: none
+    enabled: false
+    checkpoint: ampixa/real-nepali-v0.2-kala
+    revision: 90a66e818fbb4e19a8ba9b191da422a70e46a296
+    languages: [ne]
+    size: 77.7 MB ONNX, 22.05 kHz, 6 speakers
+    hardware: "CPU (card RTF ~0.02 on laptop)"
+    license: {id: CC-BY-SA-4.0 (card) vs MIT (PyPI kala-tts), url: https://huggingface.co/ampixa/real-nepali-v0.2-kala, commercial_use: REVIEW REQUIRED, notes: "Licence conflict; ~half the training data is Gemini-generated synthetic; OpenSLR-143 is actually CC BY-NC-SA."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/ampixa/real-nepali-v0.2-kala, https://pypi.org/project/kala-tts/]
+    notes: "Adapter would be ~10 lines via kala_tts.synthesize; not added until the licence question is resolved."
+
+  - id: matcha-tts-ne-sandipghimire
+    name: sandipghimire/matcha-tts-nepali
+    provider: none
+    enabled: false
+    checkpoint: sandipghimire/matcha-tts-nepali
+    revision: 2a7b77e62a3ff69340c7dc1aa93e886841d0cef6
+    languages: [ne]
+    size: ~20.9M acoustic + HiFi-GAN; ONNX 140 MB; 22.05 kHz; 2 speakers
+    license: {id: CC-BY-4.0 (weights), url: https://huggingface.co/sandipghimire/matcha-tts-nepali, commercial_use: REVIEW REQUIRED, notes: "G2P frontend is CC-BY-SA-4.0; single author, 0 downloads, created 2026-07."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/sandipghimire/matcha-tts-nepali]
+
+  - id: omnivoice
+    name: k2-fsa/OmniVoice (zero-shot, 600+ languages incl. npi)
+    provider: none
+    enabled: false
+    checkpoint: k2-fsa/OmniVoice
+    revision: c5fdb5ccb189668d56333f77ba2629f4cd7535f4
+    languages: [npi, "600+"]
+    size: ~0.6B + audio tokenizer, ~3.27 GB, 24 kHz
+    hardware: "CUDA fp16 per card"
+    license: {id: CC-BY-NC (weights), url: https://huggingface.co/k2-fsa/OmniVoice, commercial_use: "no", notes: "Code Apache-2.0; weights non-commercial (Emilia data)."}
+    verified: "2026-09-23"
+    sources: [https://huggingface.co/k2-fsa/OmniVoice]
+
+  - id: gemini-3.1-flash-tts
+    name: Gemini 3.1 Flash TTS (PREVIEW)
+    provider: gemini-tts
+    enabled: false
+    external: true
+    checkpoint: gemini-3.1-flash-tts-preview
+    languages: [ne, "many"]
+    params: {service: Google Gemini API, voice: Kore, sample_rate: 24000}
+    size: cloud
+    license: {id: Google Gemini API Terms, url: https://ai.google.dev/gemini-api/terms, commercial_use: conditional, notes: "Preview model (no stable TTS exists). Free tier content may be used by Google."}
+    verified: "2026-09-23"
+    sources: [https://ai.google.dev/gemini-api/docs/speech-generation]
+    notes: "Output raw PCM s16le 24 kHz mono. Occasional 500s documented; adapter retries once."

@@ -1,0 +1,7 @@
+Copyright (c) 2026 the nepali-voice-agent-lab owners. All rights reserved.
+
+This repository is an internal research project. No licence to use, copy, modify or distribute
+this code is granted until the owners choose one (e.g. Apache-2.0 or a proprietary licence).
+
+Third-party models, datasets and packages used by this lab are NOT covered by this file. Each keeps
+its own licence - see reports/licensing.md (generated from configs/*.yaml) and docs/licensing.md.

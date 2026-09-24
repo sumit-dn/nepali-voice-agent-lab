@@ -32,7 +32,13 @@ class PiperTTS(TTSProvider):
         if voice in (None, ""):
             return None
         mapping = self.voice.config.speaker_id_map or {}
-        return int(mapping[voice]) if voice in mapping else int(voice)
+        n = int(self.voice.config.num_speakers or 1)
+        if voice in mapping:
+            return int(mapping[voice])
+        if voice.isdigit() and int(voice) < n:
+            return int(voice)
+        valid = f"0-{n - 1}" if n > 1 else "none (single-speaker voice: leave it empty)"
+        raise ProviderError(f"Unknown Piper speaker {voice!r} for {self.spec.id}. Valid speaker numbers: {valid}.")
 
     def _synthesize(self, text: str, voice: str | None) -> tuple[np.ndarray, int, dict[str, Any]]:
         from piper import SynthesisConfig

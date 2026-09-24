@@ -451,10 +451,12 @@ def hardware_report(runs: dict[str, Path | None]) -> str:
     return "\n".join(out)
 
 
-def generate(out_dir: Path | None = None) -> list[Path]:
+def generate(out_dir: Path | None = None, runs: dict[str, Path | None] | None = None) -> list[Path]:
+    """Reports from `runs` (kind -> run dir); kinds left out use their latest run. Telephone is always latest."""
     out_dir = out_dir or config.REPORTS_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
-    runs = {k: latest_run(k) for k in ("asr", "llm", "tts")}
+    picked = runs or {}
+    runs = {k: picked[k] if k in picked else latest_run(k) for k in ("asr", "llm", "tts")}
     telephone = latest_run("telephone")
     docs = {
         "asr-comparison.md": asr_report(runs["asr"]),

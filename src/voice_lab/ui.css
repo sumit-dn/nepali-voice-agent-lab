@@ -1,0 +1,134 @@
+/* Nepali Voice Lab UI - Swiss-minimal, dense, light + dark. Tokens first; components use tokens only. */
+:root {
+  --vl-bg: #f8fafc;
+  --vl-card: #ffffff;
+  --vl-border: #e2e8f0;
+  --vl-text: #0f172a;
+  --vl-muted: #475569;
+  --vl-primary: #1e40af;
+  --vl-primary-soft: #eff6ff;
+  --vl-ok: #166534;
+  --vl-ok-soft: #dcfce7;
+  --vl-warn: #92400e;
+  --vl-warn-soft: #fef3c7;
+  --vl-bad: #991b1b;
+  --vl-bad-soft: #fee2e2;
+  --vl-neutral-soft: #f1f5f9;
+  --vl-radius: 10px;
+}
+.dark {
+  --vl-bg: #0b1220;
+  --vl-card: #0f172a;
+  --vl-border: #1e293b;
+  --vl-text: #e2e8f0;
+  --vl-muted: #94a3b8;
+  --vl-primary: #93c5fd;
+  --vl-primary-soft: rgba(59, 130, 246, 0.14);
+  --vl-ok: #86efac;
+  --vl-ok-soft: rgba(34, 197, 94, 0.14);
+  --vl-warn: #fcd34d;
+  --vl-warn-soft: rgba(245, 158, 11, 0.14);
+  --vl-bad: #fca5a5;
+  --vl-bad-soft: rgba(239, 68, 68, 0.14);
+  --vl-neutral-soft: rgba(148, 163, 184, 0.12);
+}
+
+/* Devanagari needs a little more line height than Latin to keep matras and conjuncts readable. */
+textarea, .message, .prose, .vl-text { line-height: 1.6; }
+.vl-devanagari textarea, .vl-devanagari .message { font-size: 1.05rem !important; }
+
+/* Page width and keyboard focus ----------------------------------------------------------------- */
+.vl-page { max-width: 1440px; margin: 0 auto !important; width: 100%; }
+:focus-visible { outline: 2px solid var(--vl-primary) !important; outline-offset: 2px; }
+.vl-cloud { border-left: 3px solid #d97706 !important; }
+
+/* Header ------------------------------------------------------------------------------------------ */
+.vl-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap;
+  padding: 4px 2px 14px; border-bottom: 1px solid var(--vl-border); margin-bottom: 4px; }
+.vl-title { font-size: 1.4rem; font-weight: 650; letter-spacing: -0.015em; color: var(--vl-text); margin: 0; }
+.vl-subtitle { color: var(--vl-muted); font-size: 0.875rem; margin: 2px 0 0; }
+.vl-section { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--vl-muted); margin: 4px 0 2px; }
+.vl-hint { font-size: 0.82rem; color: var(--vl-muted); margin: 0; }
+
+/* Pills (status badges): always text + colour, never colour alone. ---------------------------------- */
+.vl-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.vl-pill { display: inline-flex; align-items: center; gap: 6px; padding: 1px 9px; border-radius: 999px;
+  font-size: 0.74rem; font-weight: 600; line-height: 1.7; white-space: nowrap;
+  background: var(--vl-neutral-soft); color: var(--vl-muted); }
+.vl-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+.vl-pill.ok { background: var(--vl-ok-soft); color: var(--vl-ok); }
+.vl-pill.warn { background: var(--vl-warn-soft); color: var(--vl-warn); }
+.vl-pill.bad { background: var(--vl-bad-soft); color: var(--vl-bad); }
+.vl-pill.info { background: var(--vl-primary-soft); color: var(--vl-primary); }
+
+/* Banners ------------------------------------------------------------------------------------------- */
+.vl-banner { padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; line-height: 1.45; }
+.vl-banner.warn { background: var(--vl-warn-soft); color: var(--vl-warn); border: 1px solid currentColor; }
+.vl-banner.info { background: var(--vl-primary-soft); color: var(--vl-primary); }
+
+/* Result metrics ------------------------------------------------------------------------------------ */
+.vl-metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+.vl-metric { background: var(--vl-card); border: 1px solid var(--vl-border); border-radius: 8px; padding: 6px 10px;
+  min-width: 84px; }
+.vl-metric .k { display: block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--vl-muted); }
+.vl-metric .v { display: block; font-size: 0.98rem; font-weight: 650; font-variant-numeric: tabular-nums;
+  color: var(--vl-text); }
+.vl-note { font-size: 0.8rem; color: var(--vl-muted); margin: 6px 0 0; word-break: break-all; }
+
+/* Timing waterfall ---------------------------------------------------------------------------------- */
+.vl-wf { display: grid; grid-template-columns: 48px 1fr 68px; gap: 7px 10px; align-items: center; font-size: 0.82rem; }
+.vl-wf .stage { font-weight: 600; color: var(--vl-muted); }
+.vl-wf .track { background: var(--vl-neutral-soft); border-radius: 5px; height: 10px; overflow: hidden; }
+.vl-wf .bar { height: 100%; border-radius: 5px; background: var(--vl-primary); min-width: 2px; }
+.vl-wf .t { text-align: right; font-variant-numeric: tabular-nums; color: var(--vl-text); }
+.vl-wf .total { font-weight: 700; border-top: 1px solid var(--vl-border); padding-top: 6px; }
+
+/* Empty states, progress, logs, reports ------------------------------------------------------------- */
+.vl-empty { border: 1px dashed var(--vl-border); border-radius: var(--vl-radius); padding: 18px; text-align: center;
+  color: var(--vl-muted); font-size: 0.9rem; }
+.vl-progress { height: 6px; background: var(--vl-neutral-soft); border-radius: 3px; overflow: hidden; margin: 4px 0 2px; }
+.vl-progress > div { height: 100%; background: var(--vl-primary); transition: width 200ms ease-out; }
+.vl-log textarea { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace !important;
+  font-size: 0.78rem !important; line-height: 1.45 !important; }
+.vl-report { max-height: 72vh; overflow: auto; }
+.vl-report table { display: block; overflow-x: auto; font-size: 0.8rem; }
+.vl-report td, .vl-report th { white-space: nowrap; }
+
+/* Sidebar ------------------------------------------------------------------------------------------- */
+.vl-kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 0.8rem; margin: 0; }
+.vl-kv dt { color: var(--vl-muted); }
+.vl-kv dd { margin: 0; color: var(--vl-text); text-align: right; font-variant-numeric: tabular-nums; }
+.vl-loaded { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; }
+
+/* Human rating: criteria as a responsive grid; 300px keeps each 1-5 scale on one row ---------------- */
+.vl-criteria { background: transparent !important; border: none !important; }
+/* Gradio wraps Group children in one inner div: the grid goes there, not on the wrapper. */
+.vl-criteria > div { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 8px; background: transparent !important; }
+
+@media (max-width: 640px) {
+  .vl-title { font-size: 1.2rem; }
+  .vl-wf { grid-template-columns: 40px 1fr 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* Small HTML blocks (section labels, pills, status) without Gradio's default block chrome. */
+.vl-tight { padding: 0 !important; min-height: 0 !important; border: none !important; background: transparent !important;
+  box-shadow: none !important; }
+
+/* Scrollbars in the app's tokens, everywhere (page, tables, logs, chat, dropdowns), light and dark. ------ */
+:root { --vl-scroll-thumb: #cbd5e1; --vl-scroll-thumb-hover: #94a3b8; }
+.dark, html:has(.dark) { --vl-scroll-thumb: #334155; --vl-scroll-thumb-hover: #475569; }
+/* Gradio sets .dark below <html>, but the page scrollbar belongs to <html>: carry the scheme up. */
+html:has(.dark) { color-scheme: dark; }
+* { scrollbar-width: thin; scrollbar-color: var(--vl-scroll-thumb) transparent; }
+/* Fallback for WebKit browsers without the standard properties (e.g. Safari). */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track, *::-webkit-scrollbar-corner { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--vl-scroll-thumb); border: 2px solid transparent; border-radius: 999px;
+  background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: var(--vl-scroll-thumb-hover); background-clip: padding-box; }

@@ -6,6 +6,7 @@ This is NOT a telephony integration: input is a file, output is a file.
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -34,7 +35,10 @@ def converse(
     out_dir: Path,
     system_prompt: str,
     tools: bool = False,
+    on_update: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
+    """`on_update` gets a copy of the partial result after VAD, ASR and the LLM (for UIs that stream stages)."""
+    notify = on_update or (lambda _: None)
     audio = load_audio(audio_path)
     providers = [p for p in (vad, asr, llm, tts) if p is not None]
     for p in providers:
@@ -51,6 +55,7 @@ def converse(
         v = vad.detect_speech(audio)
         timings["vad"] = v.latency_seconds
         result["speech_segments"] = v.segments
+        notify(dict(result))
         if not v.segments:
             result["error"] = "VAD found no speech"
             return _finish(result, out_dir)
@@ -58,6 +63,7 @@ def converse(
     heard = asr.transcribe(speech)
     timings["asr"], timings["asr_rtf"] = heard.latency_seconds, heard.real_time_factor
     result["transcript"] = heard.text
+    notify(dict(result))
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": heard.text}]
     if tools:
         reply, trace, ttft, llm_seconds = run_with_tools(llm, messages)
@@ -67,6 +73,7 @@ def converse(
         ttft, llm_seconds = reply.time_to_first_token, reply.latency_seconds
     timings["llm"], timings["llm_ttft"] = llm_seconds, ttft
     result["response"] = reply.text
+    notify(dict(result))
     if not reply.text.strip():
         result["error"] = "LLM returned no text to speak"
         return _finish(result, out_dir)

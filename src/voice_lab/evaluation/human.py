@@ -16,6 +16,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from voice_lab import config
 from voice_lab.benchmarking.store import Store, now
 
 CRITERIA = ("naturalness", "pronunciation", "clarity", "prosody", "accent", "intelligibility", "mixed_language")
@@ -24,7 +25,25 @@ SCHEMA = """CREATE TABLE IF NOT EXISTS human_ratings (
   created TEXT, PRIMARY KEY (run_id, rater, clip, criterion));"""
 
 
+def sample_texts(run_dir: Path) -> dict[str, str]:
+    """Sample id -> input text: the record's metrics, else its dataset manifest (old runs lack metrics.text)."""
+    texts: dict[str, str] = {}
+    fallback: dict[str, str] = {}
+    for record_path in sorted(run_dir.glob("*.json")):
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+        texts |= {s["id"]: s["metrics"]["text"] for s in record["samples"] if (s.get("metrics") or {}).get("text")}
+        manifest = Path(record.get("dataset") or "")
+        manifest = manifest if manifest.is_absolute() else config.ROOT / manifest
+        if record.get("dataset") and manifest.is_file():
+            for line in manifest.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    row = json.loads(line)
+                    fallback.setdefault(row["id"], row.get("text", ""))
+    return fallback | texts
+
+
 def make_sheet(run_dir: Path, seed: int = 0) -> Path:
+    texts = sample_texts(run_dir)
     clips = []
     for record_path in sorted(run_dir.glob("*.json")):
         record = json.loads(record_path.read_text(encoding="utf-8"))
@@ -36,7 +55,7 @@ def make_sheet(run_dir: Path, seed: int = 0) -> Path:
                         "voice": record["variant"],
                         "sample_id": s["id"],
                         "audio": s["metrics"]["audio_path"],
-                        "text": s["metrics"].get("text", ""),
+                        "text": texts.get(s["id"], ""),
                     }
                 )
     if not clips:
